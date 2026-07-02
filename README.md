@@ -125,4 +125,4 @@ toolkit needed to read and write real C++ codebases, plus a working, tuned
 
 ## Status
 
-🚧 In progress — Day 1 of 30.
+🚧 In progress — Day 2 of 30.
