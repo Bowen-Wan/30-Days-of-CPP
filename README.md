@@ -1,4 +1,4 @@
-# 30-Day C++ Sprint — VEX Robotics Prep
+# 30-Days of C++ — Project-based Larning
 
 A 30-day, project-based C++ curriculum built to take me from fundamentals to
 class-based, multi-file C++ projects. Can be used to contribute to your team's
