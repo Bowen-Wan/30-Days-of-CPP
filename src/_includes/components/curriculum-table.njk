@@ -1,0 +1,38 @@
+<section class="section" aria-labelledby="curriculum-title">
+  <header class="section-header">
+    <h2 class="section-title" id="curriculum-title">Daily Curriculum</h2>
+    <div class="progress-bar" id="sectionProgressBar" role="progressbar" aria-valuenow="{{ curriculum.currentDay }}" aria-valuemin="0" aria-valuemax="30" aria-label="Curriculum progress">
+      {% for i in range(1, 31) %}
+        <span class="progress-segment {% if i <= curriculum.currentDay - 1 %}progress-segment--done{% elif i == curriculum.currentDay %}progress-segment--current{% else %}progress-segment--pending{% endif %}" title="Day {{ i }}: {{ curriculum.days[i-1].project }}"></span>
+      {% endfor %}
+    </div>
+    <p class="progress-label">{{ curriculum.currentDay - 1 }} complete · Day {{ curriculum.currentDay }} current · {{ 30 - curriculum.currentDay }} remaining</p>
+  </header>
+  
+  <div class="table-container" role="region" aria-label="Curriculum table" tabindex="0">
+    <table class="curriculum-table" id="curriculumTable">
+      <thead>
+        <tr>
+          <th scope="col" class="col-day">Day</th>
+          <th scope="col" class="col-project">Project</th>
+          <th scope="col" class="col-concept">Core Concept</th>
+          <th scope="col" class="col-status">Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for day in curriculum.days %}
+        <tr class="curriculum-row" data-day="{{ day.day }}" data-status="{{ day.status }}" tabindex="0" role="button" aria-label="Day {{ day.day }}: {{ day.project }} — {{ day.concept }}">
+          <td class="col-day">{{ day.day }}</td>
+          <td class="col-project">{{ day.project }}</td>
+          <td class="col-concept">{{ day.concept }}</td>
+          <td class="col-status">
+            <span class="status-badge status-badge--{{ day.status }}" aria-label="{{ day.status | statusLabel }}">
+              {{ day.status | statusIcon }}
+            </span>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</section>

@@ -1,0 +1,474 @@
+{
+  "currentDay": 3,
+  "githubRepo": "https://github.com/Bowen-Wan/30-Days-of-CPP",
+  "days": [
+    {
+      "day": 1,
+      "project": "Temperature Converter",
+      "concept": "Functions, variables, I/O, basic arithmetic",
+      "status": "done",
+      "commit": "",
+      "description": "Welcome the user. Ask for a temperature in Celsius. Convert it to Fahrenheit. Display the result. Skills: main(), variables, user input, return values, function parameters, basic arithmetic.",
+      "requirements": [
+        "Welcome the user",
+        "Ask for a temperature in Celsius",
+        "Convert it to Fahrenheit",
+        "Display the result"
+      ],
+      "extraChallenge": null
+    },
+    {
+      "day": 2,
+      "project": "Rectangle Calculator",
+      "concept": "Multiple variables, function parameters, area/perimeter",
+      "status": "done",
+      "commit": "",
+      "description": "Ask for width and height. Calculate area and perimeter. Display both neatly. Extra: Add decimal support.",
+      "requirements": [
+        "Ask for width",
+        "Ask for height",
+        "Calculate area",
+        "Calculate perimeter",
+        "Display both neatly"
+      ],
+      "extraChallenge": "Add decimal support"
+    },
+    {
+      "day": 3,
+      "project": "Shopping Calculator",
+      "concept": "Expressions, operator precedence, rounding",
+      "status": "current",
+      "commit": "",
+      "description": "Input price, quantity, tax percentage. Calculate subtotal, tax amount, total price. Extra: Round to two decimal places.",
+      "requirements": [
+        "Input price",
+        "Input quantity",
+        "Input tax percentage",
+        "Calculate subtotal",
+        "Calculate tax amount",
+        "Calculate total price"
+      ],
+      "extraChallenge": "Round to two decimal places"
+    },
+    {
+      "day": 4,
+      "project": "Basic Calculator",
+      "concept": "Multiple small functions, if/else, operator handling",
+      "status": "pending",
+      "commit": "",
+      "description": "Input number, operator, number. Supported operators: +, -, *, /. Display result. Inside calculate() use if/else. Extra: Handle division by zero.",
+      "requirements": [
+        "Input first number",
+        "Input operator",
+        "Input second number",
+        "Supported operators: +, -, *, /",
+        "Display result"
+      ],
+      "extraChallenge": "Handle division by zero"
+    },
+    {
+      "day": 5,
+      "project": "Multi-file Calculator",
+      "concept": "Header files, multiple source files, project organization",
+      "status": "pending",
+      "commit": "",
+      "description": "Split calculator into main.cpp, calculator.cpp, calculator.h. main() should only call functions. calculator.h contains declarations, calculator.cpp contains definitions.",
+      "requirements": [
+        "Create main.cpp with main()",
+        "Create calculator.h with function declarations",
+        "Create calculator.cpp with function definitions",
+        "Build with multiple source files"
+      ],
+      "extraChallenge": null
+    },
+    {
+      "day": 6,
+      "project": "Debugging Challenge",
+      "concept": "Syntax, runtime, logical errors, debugging workflow",
+      "status": "pending",
+      "commit": "",
+      "description": "Take your calculator. Intentionally create: syntax error, logical error, runtime error, incorrect output, missing return. Fix every one. Keep notes explaining why it happened and how you fixed it.",
+      "requirements": [
+        "Create syntax error",
+        "Create logical error",
+        "Create runtime error",
+        "Create incorrect output",
+        "Create missing return",
+        "Fix all errors",
+        "Document each fix"
+      ],
+      "extraChallenge": null
+    },
+    {
+      "day": 7,
+      "project": "BMI Calculator",
+      "concept": "Data types: integers, floating point, bool, char",
+      "status": "pending",
+      "commit": "",
+      "description": "Input weight (kg) and height (m). Calculate BMI. Display category: Underweight, Healthy, Overweight, Obese.",
+      "requirements": [
+        "Input weight in kg",
+        "Input height in m",
+        "Calculate BMI",
+        "Display category"
+      ],
+      "extraChallenge": null
+    },
+    {
+      "day": 8,
+      "project": "Username Validator",
+      "concept": "Strings, conditions, validation rules",
+      "status": "pending",
+      "commit": "",
+      "description": "Ask for username. Rules: minimum length, maximum length, first letter alphabetic, no spaces. Display every failed rule.",
+      "requirements": [
+        "Ask for username",
+        "Check minimum length",
+        "Check maximum length",
+        "Check first letter is alphabetic",
+        "Check no spaces",
+        "Display every failed rule"
+      ],
+      "extraChallenge": "extraChallenge": null
+    },
+    {
+      "day": 9,
+      "project": "Movie Ticket System",
+      "concept": "if/else statements, age-based pricing",
+      "status": "pending",
+      "commit": "",
+      "description": "Ask for age. Determine ticket price: child/adult/senior pricing. Bonus: Student discount.",
+      "requirements": [
+        "Ask for age",
+        "Determine ticket price based on age",
+        "Display price"
+      ],
+      "extraChallenge": "Add student discount"
+    },
+    {
+      "day": 10,
+      "project": "Rock Paper Scissors",
+      "concept": "Decision making, nested if/else, switch",
+      "status": "pending",
+      "commit": "",
+      "description": "Input: Rock, Paper, Scissors. Computer choice is hardcoded. Determine winner.",
+      "requirements": [
+        "Accept user input (Rock/Paper/Scissors)",
+        "Computer choice hardcoded",
+        "Determine and display winner"
+      ],
+      "extraChallenge": null
+    },
+    {
+      "day": 11,
+      "project": "Guess the Number",
+      "concept": "while loops, loop control",
+      "status": "pending",
+      "commit": "",
+      "description": "Computer stores 42. Keep asking until guessed. Display: Too high, Too low, Correct. Count guesses.",
+      "requirements": [
+        "Store target number (42)",
+        "Loop until correct guess",
+        "Display Too high / Too low / Correct",
+        "Count and display total guesses"
+      ],
+      "extraChallenge": null
+    },
+    {
+      "day": 12,
+      "project": "Multiplication Table",
+      "concept": "for loops, iteration",
+      "status": "pending",
+      "commit": "",
+      "description": "Input a number (e.g., 7). Output multiplication table up to 12. Bonus: Let user choose ending number.",
+      "requirements": [
+        "Input base number",
+        "Output 1× through 12×",
+        "Format: 7 × 1 = 7"
+      ],
+      "extraChallenge": "Let user choose ending number"
+    },
+    {
+      "day": 13,
+      "project": "Pattern Generator",
+      "concept": "Nested loops, pattern printing",
+      "status": "pending",
+      "commit": "",
+      "description": "Print triangle patterns: left-aligned, right-aligned, pyramid. Uses nested loops.",
+      "requirements": [
+        "Print left-aligned triangle",
+        "Print right-aligned triangle",
+        "Print pyramid pattern"
+      ],
+      "extraChallenge": null
+    },
+    {
+      "day": 14,
+      "project": "FizzBuzz",
+      "concept": "Loops with conditions, modulo operator",
+      "status": "pending",
+      "commit": "",
+      "description": "For numbers 1–100: Fizz for multiples of 3, Buzz for 5, FizzBuzz for both, number otherwise. Bonus: User chooses ending number.",
+      "requirements": [
+        "Loop 1 to 100",
+        "Print Fizz for multiples of 3",
+        "Print Buzz for multiples of 5",
+        "Print FizzBuzz for multiples of both",
+        "Print number otherwise"
+      ],
+      "extraChallenge": "Allow user to choose ending number"
+    },
+    {
+      "day": 15,
+      "project": "Dice Simulator",
+      "concept": "Random numbers, distributions, statistics",
+      "status": "pending",
+      "commit": "",
+      "description": "Roll two dice 100 times. Display every roll, total, average, highest roll, lowest roll.",
+      "requirements": [
+        "Simulate 2d6 roll",
+        "Repeat 100 times",
+        "Display every roll",
+        "Calculate and display total, average, highest, lowest"
+      ],
+      "extraChallenge": null
+    },
+    {
+      "day": 16,
+      "project": "Function Overloading",
+      "concept": "Function overloading, default arguments",
+      "status": "pending",
+      "commit": "",
+      "description": "Create add(), multiply(), print() with multiple versions: add(int,int), add(double,double), add(int,int,int), etc.",
+      "requirements": [
+        "Create overloaded add()",
+        "Create overloaded multiply()",
+        "Create overloaded print()",
+        "Demonstrate each overload"
+      ],
+      "extraChallenge": null
+    },
+    {
+      "day": 17,
+      "project": "Array Statistics",
+      "concept": "Arrays, traversal, aggregate operations",
+      "status": "pending",
+      "commit": "",
+      "description": "Input 10 numbers. Display largest, smallest, average, sum. Bonus: Count even numbers.",
+      "requirements": [
+        "Input 10 numbers into array",
+        "Find largest",
+        "Find smallest",
+        "Calculate average",
+        "Calculate sum"
+      ],
+      "extraChallenge": "Count even numbers"
+    },
+    {
+      "day": 18,
+      "project": "Reverse Array",
+      "concept": "Array manipulation, in-place algorithms",
+      "status": "pending",
+      "commit": "",
+      "description": "Store 10 values. Reverse them manually without std::reverse().",
+      "requirements": [
+        "Store 10 values in array",
+        "Reverse array in place",
+        "Do not use std::reverse()"
+      ],
+      "extraChallenge": null
+    },
+    {
+      "day": 19,
+      "project": "Pointer Swap",
+      "concept": "Pointers, pass-by-pointer, dereferencing",
+      "status": "pending",
+      "commit": "",
+      "description": "Input a and b. Swap using pointers. Print before and after. No return values.",
+      "requirements": [
+        "Input two values",
+        "Swap using pointer parameters",
+        "Print before and after",
+        "No return values from swap function"
+      ],
+      "extraChallenge": null
+    },
+    {
+      "day": 20,
+      "project": "Pointer Traversal",
+      "concept": "Pointer arithmetic, array traversal without indexing",
+      "status": "pending",
+      "commit": "",
+      "description": "Store an array. Traverse using only pointer arithmetic. Find largest, smallest, average. No array[i] inside traversal function.",
+      "requirements": [
+        "Store array of values",
+        "Traverse using pointer arithmetic only",
+        "Find largest, smallest, average",
+        "No array indexing in traversal function"
+      ],
+      "extraChallenge": null
+    },
+    {
+      "day": 21,
+      "project": "References",
+      "concept": "References vs pointers, when to use each",
+      "status": "pending",
+      "commit": "",
+      "description": "Rewrite Day 19 swap using references. Write comparison: when to choose pointer vs reference.",
+      "requirements": [
+        "Rewrite swap using references",
+        "Write pointer vs reference comparison",
+        "Explain when to use each"
+      ],
+      "extraChallenge": null
+    },
+    {
+      "day": 22,
+      "project": "Student Record System",
+      "concept": "Structs, structured data, formatted output",
+      "status": "pending",
+      "commit": "",
+      "description": "Each student has: name, age, grade. Allow user to enter 5 students, then display all records in a formatted table.",
+      "requirements": [
+        "Define Student struct",
+        "Input 5 students",
+        "Display formatted table"
+      ],
+      "extraChallenge": null
+    },
+    {
+      "day": 23,
+      "project": "Restaurant Ordering System",
+      "concept": "Enums, type aliases, menu-driven programs",
+      "status": "pending",
+      "commit": "",
+      "description": "Create menu with numbered items (using enum). Let user choose items, calculate total bill, print itemized receipt.",
+      "requirements": [
+        "Define menu items with enum",
+        "Display menu",
+        "Allow item selection",
+        "Calculate total",
+        "Print itemized receipt"
+      ],
+      "extraChallenge": null
+    },
+    {
+      "day": 24,
+      "project": "Project Refactor (Scope & Linkage)",
+      "concept": "Scope, duration, linkage, file organization",
+      "status": "pending",
+      "commit": "",
+      "description": "Take Student Record or Restaurant system and reorganize: move reusable functions to separate files, eliminate unnecessary globals, keep variables in smallest possible scope.",
+      "requirements": [
+        "Choose previous project",
+        "Move functions to separate files",
+        "Eliminate unnecessary globals",
+        "Minimize variable scope"
+      ],
+      "extraChallenge": null
+    },
+    {
+      "day": 25,
+      "project": "Password Strength Checker",
+      "concept": "std::string advanced, character classification",
+      "status": "pending",
+      "commit": "",
+      "description": "Evaluate password: minimum length, uppercase, lowercase, number, special character. Display which requirements passed and overall strength rating.",
+      "requirements": [
+        "Check minimum length",
+        "Check uppercase letter",
+        "Check lowercase letter",
+        "Check number",
+        "Check special character",
+        "Display passed/failed for each",
+        "Assign overall strength rating"
+      ],
+      "extraChallenge": null
+    },
+    {
+      "day": 26,
+      "project": "Gradebook (Vectors)",
+      "concept": "std::vector, dynamic containers, push_back",
+      "status": "pending",
+      "commit": "",
+      "description": "Allow user to enter unknown number of grades (until they stop). Display: all grades, highest, lowest, average.",
+      "requirements": [
+        "Use std::vector for grades",
+        "Input loop until user stops",
+        "Display all grades",
+        "Display highest, lowest, average"
+      ],
+      "extraChallenge": null
+    },
+    {
+      "day": 27,
+      "project": "Search & Sort",
+      "concept": "Iterators, algorithms, std::find, std::sort",
+      "status": "pending",
+      "commit": "",
+      "description": "Extend Gradebook: search for a grade, sort ascending, sort descending, remove a grade. Use standard algorithms where appropriate.",
+      "requirements": [
+        "Search for a grade",
+        "Sort ascending",
+        "Sort descending",
+        "Remove a grade",
+        "Use standard algorithms"
+      ],
+      "extraChallenge": null
+    },
+    {
+      "day": 28,
+      "project": "Bank Account Class",
+      "concept": "Classes, member functions, encapsulation basics",
+      "status": "pending",
+      "commit": "",
+      "description": "Implement BankAccount class: account holder name, balance, deposit, withdraw, display balance. Instantiate multiple accounts in main().",
+      "requirements": [
+        "Define BankAccount class",
+        "Member: account holder name",
+        "Member: balance",
+        "Method: deposit",
+        "Method: withdraw",
+        "Method: display balance",
+        "Create multiple accounts in main()"
+      ],
+      "extraChallenge": null
+    },
+    {
+      "day": 29,
+      "project": "Enhanced Bank Account",
+      "concept": "Constructors, private members, getters, validation, vector of objects",
+      "status": "pending",
+      "commit": "",
+      "description": "Improve Bank Account: constructors, private data members, getter functions, input validation (no negative deposits), multiple accounts in std::vector.",
+      "requirements": [
+        "Add constructors",
+        "Make data members private",
+        "Add getter functions",
+        "Add input validation",
+        "Store multiple accounts in vector"
+      ],
+      "extraChallenge": null
+    },
+    {
+      "day": 30,
+      "project": "Student Management System (Final Project)",
+      "concept": "Comprehensive review: menus, functions, vectors, classes, pointers/references, input validation, multi-file organization",
+      "status": "pending",
+      "commit": "",
+      "description": "Menu-driven system: Add student, Remove student, Search by name, Display all students, Display class statistics (highest, lowest, average), Exit. Multi-file, clean organization, validated input.",
+      "requirements": [
+        "Add a student",
+        "Remove a student",
+        "Search by name",
+        "Display all students",
+        "Display class statistics",
+        "Exit option",
+        "Multi-file organization",
+        "Input validation",
+        "Clean, readable, well-commented code"
+      ],
+      "extraChallenge": "Organize across multiple .cpp/.h files; validate all input"
+    }
+  ]
+}

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # 30-Days of C++ — Project-based Larning
 
 A 30-day, project-based C++ curriculum built to take me from fundamentals to
@@ -126,3 +127,126 @@ toolkit needed to read and write real C++ codebases, plus a working, tuned
 ## Status
 
 🚧 In progress — Day 4 of 30.
+=======
+# 30-Day C++ Sprint — Portfolio Site
+
+A static site documenting a 30-day project-based C++ curriculum for VEX robotics preparation.
+
+## Stack
+
+- **Eleventy (11ty)** — Static site generator
+- **Vanilla CSS/JS** — No framework dependencies
+- **Cloudflare Workers + KV** — Progress persistence API
+- **GitHub Actions** — Build & deploy
+- **GitHub Pages** — Static hosting
+
+## Local Development
+
+```bash
+# Install dependencies
+npm ci
+
+# Start dev server (with live reload)
+npm run dev
+
+# Production build
+npm run build
+```
+
+## Cloudflare Setup
+
+### 1. Create KV Namespace
+
+```bash
+wrangler kv:namespace create "cpp-sprint-progress"
+# Note the namespace ID
+```
+
+### 2. Set Secrets
+
+```bash
+wrangler secret put GH_OAUTH_CLIENT_ID
+wrangler secret put GH_OAUTH_CLIENT_SECRET
+wrangler secret put GH_ADMIN_TOKEN
+```
+
+### 3. Update wrangler.toml
+
+Replace `id` and `preview_id` with your KV namespace IDs.
+
+### 4. Deploy Workers
+
+```bash
+wrangler deploy --env production
+```
+
+## GitHub Secrets
+
+Required in repo Settings → Secrets → Actions:
+
+| Secret | Description |
+|--------|-------------|
+| `CF_ACCOUNT_ID` | Cloudflare account ID |
+| `CF_API_TOKEN` | API token with Workers KV:Edit |
+| `GH_OAUTH_CLIENT_ID` | GitHub OAuth app client ID |
+| `GH_OAUTH_CLIENT_SECRET` | GitHub OAuth app client secret |
+| `GH_ADMIN_TOKEN` | GitHub PAT with `repo` scope (for admin commits) |
+
+## GitHub OAuth App
+
+1. Settings → Developer settings → OAuth Apps → New OAuth App
+2. Homepage: `https://bowen-wan.github.io/30-Days-of-CPP`
+3. Callback: `https://bowen-wan.github.io/30-Days-of-CPP/api/auth/callback`
+4. Copy Client ID & Secret to GitHub Secrets
+
+## Admin Panel
+
+Visit `/admin` after GitHub OAuth login to update `currentDay` in `curriculum.json`. Triggers rebuild automatically.
+
+## Project Structure
+
+```
+src/
+├── _includes/
+│   ├── layouts/base.njk
+│   └── components/
+│       ├── hero.njk
+│       ├── mission-brief.njk
+│       ├── goals.njk
+│       ├── architecture.njk
+│       ├── pid-integration.njk
+│       ├── curriculum-table.njk
+│       ├── curriculum-cards.njk
+│       ├── slide-panel.njk
+│       ├── review-process.njk
+│       └── footer.njk
+├── _data/curriculum.json          # Source of truth
+├── assets/
+│   ├── css/styles.css
+│   ├── js/app.js                  # Main logic
+│   └── js/curriculum-data.js.njk  # Generated at build
+├── index.njk                      # Main page
+└── admin.njk                      # Admin panel
+functions/
+├── api/
+│   ├── _middleware.js
+│   ├── progress.js                # GET/POST progress
+│   └── admin/index.js             # OAuth + update-day
+.github/workflows/deploy.yml       # Build & deploy
+wrangler.toml                      # Workers config
+```
+
+## Curriculum Data
+
+Edit `src/_data/curriculum.json` to update:
+- `currentDay` — single source of truth
+- `days[]` — project, concept, requirements, commit hash
+
+## Fonts
+
+`IBM Plex Mono` subset (Latin) self-hosted in `src/assets/fonts/`. Download from Google Fonts.
+
+## License
+
+MIT — Use freely for your own curriculum tracking.
+>>>>>>> 49d7c98 (feat: initial 30-day C++ sprint portfolio site)

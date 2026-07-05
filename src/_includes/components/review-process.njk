@@ -1,0 +1,36 @@
+<section class="section" aria-labelledby="review-title">
+  <header class="section-header">
+    <h2 class="section-title" id="review-title">Review Process</h2>
+  </header>
+  
+  <div class="grid-2">
+    <article class="card">
+      <h3>Phase 1: Build</h3>
+      <p>Write the day's program in <code>blank/</code>. No reference to <code>solved/</code>. Compile. Fix syntax errors. Run. Fix runtime errors. Test edge cases.</p>
+    </article>
+    
+    <article class="card">
+      <h3>Phase 2: Test</h3>
+      <p>Verify every requirement from the spec. Add ad-hoc tests for edge cases not in requirements. Document any behavior you're unsure about.</p>
+    </article>
+    
+    <article class="card">
+      <h3>Phase 3: Retrieve</h3>
+      <p>Diff <code>blank/</code> against <code>solved/</code>. For every difference: categorize (missing, wrong, better, style). Annotate in commit message or separate notes file.</p>
+    </article>
+    
+    <article class="card">
+      <h3>Phase 4: Log</h3>
+      <p>Commit both directories. Message: <code>day-XX: Project Name — status</code>. Push. The log is the artifact. Future you reads it to reconstruct reasoning.</p>
+    </article>
+  </div>
+  
+  <article class="card" style="margin-top: var(--space-5);">
+    <h3>Commit Message Convention</h3>
+    <pre><code>day-07: BMI Calculator — fixed float comparison bug
+day-14: FizzBuzz — added user-defined upper bound
+day-22: Student Record — refactored to separate files
+day-28: PID Plant — P-only controller, steady-state error logged</code></pre>
+    <p>Status keywords: <code>done</code>, <code>wip</code>, <code>bugfix</code>, <code>refactor</code>, <code>retry</code>. No "feat", "fix" — the day number <em>is</em> the scope.</p>
+  </article>
+</section>

@@ -1,0 +1,56 @@
+<section class="section" aria-labelledby="architecture-title">
+  <header class="section-header">
+    <h2 class="section-title" id="architecture-title">Architecture</h2>
+  </header>
+  
+  <div class="grid-2">
+    <article class="card">
+      <h3>Solved / Blank Pattern</h3>
+      <p>Each day has two directories:</p>
+      <pre><code>day-XX/
+├── solved/     # Reference implementation
+│   ├── main.cpp
+│   ├── *.h
+│   └── *.cpp
+└── blank/      # Your attempt (write from memory)
+    ├── main.cpp
+    └── *.h / *.cpp (as needed)</code></pre>
+      <p>Workflow: Study <code>solved/</code> → Close it → Implement in <code>blank/</code> → Diff → Annotate gaps.</p>
+    </article>
+    
+    <article class="card">
+      <h3>Retrieval Testing Loop</h3>
+      <div class="architecture-diagram">Study solved/ (15–30 min)
+    │
+    ▼
+Close all references
+    │
+    ▼
+Write blank/ from memory
+    │
+    ▼
+Diff: solved/ vs blank/
+    │
+    ├─► Missing?  → Annotate: "forgot bounds check"
+    ├─► Wrong?    → Annotate: "off-by-one in loop"
+    ├─► Better?   → Annotate: "used algorithm, cleaner"
+    └─► Style?    → Annotate: "naming inconsistent"
+    │
+    ▼
+Commit both + annotations
+    │
+    ▼
+Next day</div>
+    </article>
+  </div>
+  
+  <article class="card" style="margin-top: var(--space-5);">
+    <h3>Why This Works</h3>
+    <ul>
+      <li><strong>Active recall</strong> > passive re-reading. The struggle to reconstruct strengthens memory traces.</li>
+      <li><strong>Immediate feedback</strong> from the diff — no waiting for a grader.</li>
+      <li><strong>Metacognition</strong> — annotation forces you to name the gap: "I forgot to validate input" vs "I didn't know."</li>
+      <li><strong>Artifact trail</strong> — the commit log shows progression, not just final state. Retry commits are visible.</li>
+    </ul>
+  </article>
+</section>
