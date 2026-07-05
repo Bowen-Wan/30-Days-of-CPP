@@ -14,7 +14,7 @@ tuning-intuition approach rather than a textbook derivation. If you want to
 see whether the retrieval discipline actually holds up, the commit history is
 the place to check — not just the final `dayN_solved.cpp` files.
 
-## Goals
+# Goals
 
 - Reach a level of C++ fluency where I can read and modify our team's existing
   code without hand-holding.
@@ -24,7 +24,7 @@ the place to check — not just the final `dayN_solved.cpp` files.
 - Retain what I learn — not just finish lessons. Every day produces working,
   tested code, not notes.
 
-## Structure
+# Structure
 
 Each day has two files:
 
@@ -39,7 +39,7 @@ Commit messages note what was shaky that day (e.g. `Day 19: pointer swap,
 still slow on dereferencing syntax`) so the commit history doubles as a
 retrieval log.
 
-## PID Integration — Decided
+# PID Integration — Decided
 
 Watched at Day 28 (Brian Douglas video, see Resources), after class syntax is
 solid but before the sprint's own class capstones.
@@ -52,7 +52,7 @@ solid but before the sprint's own class capstones.
   this unit, the same way commit messages serve that role for the rest of the
   sprint.
 
-## Resources
+# Resources
 
 - **PID intuition:** Brian Douglas, *"PID Control – A brief introduction"*
   (YouTube, *Control System Lectures*) — watched at Day 28, once class syntax
@@ -62,7 +62,7 @@ solid but before the sprint's own class capstones.
   bench-tuning is. Reading the equations first would make me good at the math
   and bad at the actual skill.
 
-## Daily Curriculum
+# Daily Curriculum
 
 | Day | Project | Core Concept |
 |-----|---------|---------------|
@@ -102,7 +102,7 @@ pointers/references, classes, and multi-file project organization — the core
 toolkit needed to read and write real C++ codebases, plus a working, tuned
 `PIDController` class.
 
-## Repository Structure
+# Repository Structure
 
 ```
 30-day-cpp-sprint/
