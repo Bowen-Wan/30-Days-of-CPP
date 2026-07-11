@@ -129,7 +129,7 @@
         "Check no spaces",
         "Display every failed rule"
       ],
-      "extraChallenge": "extraChallenge": null
+      "extraChallenge": null
     },
     {
       "day": 9,
