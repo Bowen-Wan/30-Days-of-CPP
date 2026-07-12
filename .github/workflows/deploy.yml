@@ -51,27 +51,27 @@ jobs:
         uses: actions/deploy-pages@v4
 
   # Also deploy Workers (API)
-  deploy-workers:
-    needs: build
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: 'npm'
-
-      - name: Install Wrangler
-        run: npm install -g wrangler
-
-      - name: Deploy Workers
-        run: wrangler deploy --env production
-        env:
-          CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
-          CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
-          GH_OAUTH_CLIENT_ID: ${{ secrets.GH_OAUTH_CLIENT_ID }}
-          GH_OAUTH_CLIENT_SECRET: ${{ secrets.GH_OAUTH_CLIENT_SECRET }}
-          GH_ADMIN_TOKEN: ${{ secrets.GH_ADMIN_TOKEN }}
+  # deploy-workers:
+  #   needs: build
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - name: Checkout
+  #       uses: actions/checkout@v4
+  #
+  #     - name: Setup Node
+  #       uses: actions/setup-node@v4
+  #       with:
+  #         node-version: ${{ env.NODE_VERSION }}
+  #         cache: 'npm'
+  #
+  #     - name: Install Wrangler
+  #       run: npm install -g wrangler
+  #
+  #     - name: Deploy Workers
+  #       run: wrangler deploy --env production
+  #       env:
+  #         CF_ACCOUNT_ID: ${{ secrets.CF_ACCOUNT_ID }}
+  #         CF_API_TOKEN: ${{ secrets.CF_API_TOKEN }}
+  #         GH_OAUTH_CLIENT_ID: ${{ secrets.GH_OAUTH_CLIENT_ID }}
+  #         GH_OAUTH_CLIENT_SECRET: ${{ secrets.GH_OAUTH_CLIENT_SECRET }}
+  #         GH_ADMIN_TOKEN: ${{ secrets.GH_ADMIN_TOKEN }}
