@@ -602,6 +602,30 @@ hr { border: none; border-top: 1px solid var(--border); margin: var(--space-6) 0
 .curriculum-table .status-cell--pending { color: var(--fg-subtle); }
 .curriculum-table .status-cell--missed { color: var(--err); }
 
+/* Complete checkbox in status column */
+.status-checkbox { 
+  appearance: none; 
+  width: 20px; 
+  height: 20px; 
+  border: 2px solid var(--border); 
+  background: var(--bg); 
+  cursor: pointer; 
+  transition: all var(--transition-fast); 
+  flex-shrink: 0; 
+  border-radius: 0; 
+}
+.status-checkbox:checked { 
+  background: var(--ok); 
+  border-color: var(--ok); 
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230a0d12' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='20 6 9 17 4 12'%3E%3C/polyline%3E%3C/svg%3E");
+  background-size: 16px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+.status-checkbox:hover { border-color: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
+.status-checkbox:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--accent-glow); }
+.status-checkbox:disabled { opacity: 0.5; cursor: not-allowed; }
+
 /* ==========================================================================
    Curriculum Cards (Mobile)
    ========================================================================== */

@@ -17,6 +17,7 @@
           <th scope="col" class="col-project">Project</th>
           <th scope="col" class="col-concept">Core Concept</th>
           <th scope="col" class="col-status">Status</th>
+          <th scope="col" class="col-action">Action</th>
         </tr>
       </thead>
       <tbody>
@@ -29,6 +30,9 @@
             <span class="status-badge status-badge--{{ day.status }}" aria-label="{{ day.status | statusLabel }}">
               {{ day.status | statusIcon }}
             </span>
+          </td>
+          <td class="col-action">
+            <input type="checkbox" class="status-checkbox" data-day="{{ day.day }}" {% if day.status == 'done' or day.day < curriculum.currentDay %}checked disabled{% endif %} aria-label="Mark Day {{ day.day }} complete">
           </td>
         </tr>
         {% endfor %}

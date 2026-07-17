@@ -164,12 +164,27 @@ function attachTableListeners() {
   if (!curriculumTable) return;
   
   curriculumTable.querySelectorAll('.curriculum-row').forEach(row => {
-    row.addEventListener('click', () => openPanel(parseInt(row.dataset.day, 10)));
+    row.addEventListener('click', (e) => {
+      // Don't open panel if clicking the checkbox
+      if (e.target.closest('.status-checkbox')) return;
+      openPanel(parseInt(row.dataset.day, 10));
+    });
     row.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
         openPanel(parseInt(row.dataset.day, 10));
       }
+    });
+  });
+  
+  // Status checkbox in table
+  curriculumTable.querySelectorAll('.status-checkbox').forEach(cb => {
+    cb.addEventListener('change', (e) => {
+      e.stopPropagation();
+      const day = parseInt(cb.dataset.day, 10);
+      toggleComplete(day);
+      // Update checkbox visual state
+      cb.disabled = completedDays.has(day);
     });
   });
   
