@@ -10,6 +10,8 @@ module.exports = function(eleventyConfig) {
   // Global data: build date
   eleventyConfig.addGlobalData("buildDate", new Date().toISOString().split('T')[0]);
   eleventyConfig.addGlobalData("baseUrl", "/30-Days-of-CPP/");
+  eleventyConfig.addGlobalData("googleClientId", process.env.GOOGLE_CLIENT_ID || "");
+  eleventyConfig.addGlobalData("adminEmail", process.env.ADMIN_EMAIL || "");
 
   // Filters
   eleventyConfig.addFilter("statusIcon", (status) => {

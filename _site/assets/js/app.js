@@ -3,10 +3,15 @@
 
 import { curriculumData } from './curriculum-data.js';
 
+// Global config from Eleventy
+const GOOGLE_CLIENT_ID = window.GOOGLE_CLIENT_ID || '';
+const ADMIN_EMAIL = window.ADMIN_EMAIL || ''; // set via Eleventy global data
+
 // State
 let currentDay = curriculumData.currentDay;
 let completedDays = new Set();
 let activePanelDay = null;
+let currentUser = null; // { sub, email, name, picture }
 
 // DOM Elements
 const curriculumTable = document.getElementById('curriculumTable');
@@ -21,37 +26,166 @@ const heroProgressBar = document.getElementById('heroProgressBar');
 const sectionProgressBar = document.getElementById('sectionProgressBar');
 const sectionProgressBarMobile = document.getElementById('sectionProgressBarMobile');
 const currentDayBadge = document.getElementById('currentDayBadge');
+const authControls = document.getElementById('auth-controls');
+const gsiBtnContainer = document.getElementById('gsi-btn');
+const userInfoEl = document.getElementById('user-info');
 
 // Initialize
 document.addEventListener('DOMContentLoaded', init);
 
 async function init() {
-  // Load progress from KV
+  // Load any existing user session
+  loadUserSession();
+
+  // Initialize Google Sign-In
+  initGoogleSignIn();
+
+  // Load progress for current user (or anonymous)
   await loadProgress();
-  
+
   // Render progress bars
   renderProgressBars();
-  
+
   // Attach event listeners
   attachTableListeners();
   attachCardListeners();
   attachPanelListeners();
   attachMarkCompleteListeners();
-  
-  // Handle keyboard navigation
+
+  // Keyboard navigation
   document.addEventListener('keydown', handleGlobalKeydown);
-  
-  // Sync progress to KV on changes
+
+  // Sync progress on changes
   window.addEventListener('beforeunload', saveProgress);
+
+  // Update auth UI
+  updateAuthUI();
 }
 
 // ============================================================================
-// Progress Persistence (Cloudflare Workers KV)
+// Google Sign-In
 // ============================================================================
 
+function initGoogleSignIn() {
+  if (!GOOGLE_CLIENT_ID) {
+    console.warn('Google Client ID not configured; auth disabled');
+    gsiBtnContainer.innerHTML = '<span style="color:var(--fg-subtle);font-size:0.75rem;">Auth not configured</span>';
+    return;
+  }
+
+  // Wait for GIS library
+  if (window.google && window.google.accounts) {
+    renderSignInButton();
+  } else {
+    // Wait for library load
+    const check = setInterval(() => {
+      if (window.google && window.google.accounts) {
+        clearInterval(check);
+        renderSignInButton();
+      }
+    }, 100);
+  }
+}
+
+function renderSignInButton() {
+  if (currentUser) {
+    // Signed in: show user info and sign-out button
+    gsiBtnContainer.innerHTML = '';
+    userInfoEl.style.display = 'inline';
+    userInfoEl.textContent = `${currentUser.name} (${currentUser.email})`;
+    const signOutBtn = document.createElement('button');
+    signOutBtn.className = 'btn btn--ghost btn--sm';
+    signOutBtn.textContent = 'Sign out';
+    signOutBtn.addEventListener('click', signOut);
+    gsiBtnContainer.appendChild(signOutBtn);
+    // Show admin link if admin
+    maybeShowAdminLink();
+    return;
+  }
+
+  // Not signed in: render Google Sign-In button
+  gsiBtnContainer.innerHTML = '';
+  window.google.accounts.id.renderButton(gsiBtnContainer, {
+    theme: 'outline',
+    size: 'large',
+    width: 200,
+    text: 'signin_with',
+    logo_alignment: 'left'
+  });
+
+  // Also listen for credential response
+  window.google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: handleCredentialResponse,
+    auto_select: false,
+    cancel_on_tap_outside: true
+  });
+}
+
+function handleCredentialResponse(response) {
+  // Decode JWT to get user info
+  const payload = parseJwt(response.credential);
+  currentUser = {
+    sub: payload.sub,
+    email: payload.email,
+    name: payload.name,
+    picture: payload.picture
+  };
+  // Persist user session
+  localStorage.setItem('googleUser', JSON.stringify(currentUser));
+  updateAuthUI();
+  // Load this user's progress
+  loadProgress();
+}
+
+function parseJwt(token) {
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+  const jsonPayload = decodeURIComponent(atob(base64).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
+  return JSON.parse(jsonPayload);
+}
+
+function loadUserSession() {
+  const stored = localStorage.getItem('googleUser');
+  if (stored) {
+    try {
+      currentUser = JSON.parse(stored);
+    } catch (e) {
+      localStorage.removeItem('googleUser');
+    }
+  }
+}
+
+function signOut() {
+  // Revoke Google session
+  if (window.google && window.google.accounts) {
+    window.google.accounts.id.disableAutoSelect();
+  }
+  currentUser = null;
+  localStorage.removeItem('googleUser');
+  completedDays.clear();
+  updateAuthUI();
+  // Reset UI progress
+  updateCompletedDayStyles();
+  renderProgressBars();
+}
+
+function updateAuthUI() {
+  renderSignInButton();
+}
+
+// ============================================================================
+// Progress Persistence (per user)
+// ============================================================================
+
+function getProgressStorageKey() {
+  return currentUser ? `cpp-sprint-progress-${currentUser.sub}` : 'cpp-sprint-progress-anon';
+}
+
 async function loadProgress() {
+  const key = getProgressStorageKey();
   try {
-    const response = await fetch('/api/progress');
+    const response = await fetch('/api/progress?user=' + encodeURIComponent(currentUser?.sub || 'anon'));
     if (response.ok) {
       const data = await response.json();
       if (data.completed) {
@@ -59,75 +193,74 @@ async function loadProgress() {
       }
     }
   } catch (e) {
-    console.warn('Progress load failed, using localStorage fallback:', e);
     // Fallback to localStorage
-    const stored = localStorage.getItem('cpp-sprint-progress');
+    const stored = localStorage.getItem('cpp-sprint-progress-' + (currentUser?.sub || 'anon'));
     if (stored) {
       try { completedDays = new Set(JSON.parse(stored)); } catch {}
     }
   }
-  
-  // Update UI for completed days
   updateCompletedDayStyles();
 }
 
 async function saveProgress() {
+  const key = getProgressStorageKey();
   const data = { completed: Array.from(completedDays).sort((a, b) => a - b) };
-  
   try {
     await fetch('/api/progress', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
+      body: JSON.stringify({ user: currentUser?.sub || 'anon', completed: data.completed })
     });
   } catch (e) {
-    console.warn('Progress save failed, using localStorage fallback:', e);
-    localStorage.setItem('cpp-sprint-progress', JSON.stringify(data.completed));
+    localStorage.setItem('cpp-sprint-progress-' + (currentUser?.sub || 'anon'), JSON.stringify(data.completed));
   }
 }
+
+// ============================================================================
+// UI Updates
+// ============================================================================
 
 function updateCompletedDayStyles() {
   // Table rows
   document.querySelectorAll('.curriculum-row').forEach(row => {
     const day = parseInt(row.dataset.day, 10);
-    if (completedDays.has(day) && day !== currentDay) {
-      row.dataset.status = 'done';
-      const badge = row.querySelector('.status-badge');
-      if (badge) {
-        badge.className = 'status-badge status-badge--done';
-        badge.textContent = '✓';
-        badge.setAttribute('aria-label', 'Complete');
-      }
+    const isDone = completedDays.has(day) && day !== currentDay;
+    row.dataset.status = isDone ? 'done' : (day === currentDay ? 'current' : 'pending');
+    const badge = row.querySelector('.status-badge');
+    if (badge) {
+      badge.className = `status-badge status-badge--${isDone ? 'done' : (day === currentDay ? 'current' : 'pending')}`;
+      badge.textContent = isDone ? '✓' : (day === currentDay ? '●' : '○');
+      badge.setAttribute('aria-label', isDone ? 'Complete' : (day === currentDay ? 'In Progress' : 'Pending'));
+    }
+    // Update checkbox
+    const cb = row.querySelector('.status-checkbox');
+    if (cb) {
+      cb.checked = completedDays.has(day);
+      cb.disabled = completedDays.has(day) || day < currentDay;
     }
   });
-  
+
   // Cards
   document.querySelectorAll('.curriculum-card').forEach(card => {
     const day = parseInt(card.dataset.day, 10);
-    if (completedDays.has(day) && day !== currentDay) {
-      card.dataset.status = 'done';
-      const badge = card.querySelector('.status-badge');
-      if (badge) {
-        badge.className = 'status-badge status-badge--done';
-        badge.textContent = '✓';
-        badge.setAttribute('aria-label', 'Complete');
-      }
-      const btn = card.querySelector('.mark-complete-btn');
-      if (btn) {
-        btn.disabled = true;
-        btn.textContent = '✓ Marked Complete';
-      }
+    const isDone = completedDays.has(day) && day !== currentDay;
+    card.dataset.status = isDone ? 'done' : (day === currentDay ? 'current' : 'pending');
+    const badge = card.querySelector('.status-badge');
+    if (badge) {
+      badge.className = `status-badge status-badge--${isDone ? 'done' : (day === currentDay ? 'current' : 'pending')}`;
+      badge.textContent = isDone ? '✓' : (day === currentDay ? '●' : '○');
+      badge.setAttribute('aria-label', isDone ? 'Complete' : (day === currentDay ? 'In Progress' : 'Pending'));
+    }
+    const btn = card.querySelector('.mark-complete-btn');
+    if (btn) {
+      btn.disabled = completedDays.has(day);
+      btn.textContent = completedDays.has(day) ? '✓ Marked Complete' : 'Mark Complete';
     }
   });
 }
 
-// ============================================================================
-// Progress Bar Rendering
-// ============================================================================
-
 function renderProgressBars() {
   const bars = [heroProgressBar, sectionProgressBar, sectionProgressBarMobile];
-  
   bars.forEach(bar => {
     if (!bar) return;
     bar.innerHTML = '';
@@ -140,17 +273,9 @@ function renderProgressBars() {
       else seg.classList.add('progress-segment--pending');
       bar.appendChild(seg);
     }
-    if (bar.hasAttribute('aria-valuenow')) {
-      bar.setAttribute('aria-valuenow', currentDay);
-    }
+    if (bar.hasAttribute('aria-valuenow')) bar.setAttribute('aria-valuenow', currentDay);
   });
-  
-  // Update badge
-  if (currentDayBadge) {
-    currentDayBadge.textContent = `Day ${currentDay} of 30`;
-  }
-  
-  // Update progress labels
+  if (currentDayBadge) currentDayBadge.textContent = `Day ${currentDay} of 30`;
   document.querySelectorAll('.progress-label').forEach(label => {
     label.textContent = `${currentDay - 1} complete · Day ${currentDay} current · ${30 - currentDay} remaining`;
   });
@@ -162,10 +287,8 @@ function renderProgressBars() {
 
 function attachTableListeners() {
   if (!curriculumTable) return;
-  
   curriculumTable.querySelectorAll('.curriculum-row').forEach(row => {
     row.addEventListener('click', (e) => {
-      // Don't open panel if clicking the checkbox
       if (e.target.closest('.status-checkbox')) return;
       openPanel(parseInt(row.dataset.day, 10));
     });
@@ -176,33 +299,24 @@ function attachTableListeners() {
       }
     });
   });
-  
-  // Status checkbox in table
   curriculumTable.querySelectorAll('.status-checkbox').forEach(cb => {
     cb.addEventListener('change', (e) => {
       e.stopPropagation();
       const day = parseInt(cb.dataset.day, 10);
       toggleComplete(day);
-      // Update checkbox visual state
       cb.disabled = completedDays.has(day);
     });
   });
-  
-  // Keyboard navigation within table
   curriculumTable.addEventListener('keydown', (e) => {
     const rows = Array.from(curriculumTable.querySelectorAll('.curriculum-row'));
-    const focused = document.activeElement;
-    const idx = rows.indexOf(focused);
-    
+    const idx = rows.indexOf(document.activeElement);
     if (idx === -1) return;
-    
     let newIdx = idx;
     if (e.key === 'ArrowDown') newIdx = Math.min(idx + 1, rows.length - 1);
     else if (e.key === 'ArrowUp') newIdx = Math.max(idx - 1, 0);
     else if (e.key === 'Home') newIdx = 0;
     else if (e.key === 'End') newIdx = rows.length - 1;
     else return;
-    
     e.preventDefault();
     rows[newIdx].focus();
   });
@@ -214,10 +328,8 @@ function attachTableListeners() {
 
 function attachCardListeners() {
   if (!curriculumCards) return;
-  
   curriculumCards.querySelectorAll('.curriculum-card summary').forEach(summary => {
     summary.addEventListener('click', (e) => {
-      // Let details handle toggle, but track for analytics
       const card = summary.closest('.curriculum-card');
       const day = parseInt(card.dataset.day, 10);
       console.debug('Card toggled:', day);
@@ -242,23 +354,16 @@ function attachMarkCompleteListeners() {
 function openPanel(day) {
   const dayData = curriculumData.days.find(d => d.day === day);
   if (!dayData) return;
-  
   activePanelDay = day;
   renderPanel(dayData);
   updatePanelNav();
-  
   slidePanel.hidden = false;
   slidePanelOverlay.hidden = false;
-  // Force reflow for animation
   slidePanel.getBoundingClientRect();
   slidePanel.setAttribute('open', '');
   slidePanelOverlay.setAttribute('open', '');
-  
-  // Focus management
   slidePanelClose.focus();
   document.body.style.overflow = 'hidden';
-  
-  // Trap focus
   trapFocus(slidePanel);
 }
 
@@ -266,35 +371,29 @@ function closePanel() {
   slidePanel.removeAttribute('open');
   slidePanelOverlay.removeAttribute('open');
   document.body.style.overflow = '';
-  
-  // Return focus to triggering element
   const trigger = document.querySelector(`.curriculum-row[data-day="${activePanelDay}"], .curriculum-card[data-day="${activePanelDay}"] summary`);
   trigger?.focus();
-  
   activePanelDay = null;
 }
 
 function renderPanel(dayData) {
   const isDone = completedDays.has(dayData.day) || dayData.status === 'done';
   const isCurrent = dayData.day === currentDay;
-  
   let statusClass = 'badge--pending';
   let statusLabel = 'Pending';
   if (isDone) { statusClass = 'badge--ok'; statusLabel = 'Complete'; }
   else if (isCurrent) { statusClass = 'badge--warn'; statusLabel = 'In Progress'; }
   else if (dayData.status === 'missed') { statusClass = 'badge--err'; statusLabel = 'Missed'; }
-  
+
   slidePanelBody.innerHTML = `
     <div class="day-detail-meta">
       <span class="badge ${statusClass}">${statusLabel}</span>
       <span class="badge badge--pending">${dayData.concept}</span>
     </div>
-    
     <section class="day-detail-section">
       <h4>Objective</h4>
       <p>${dayData.description || 'No description provided.'}</p>
     </section>
-    
     ${dayData.requirements && dayData.requirements.length ? `
     <section class="day-detail-section">
       <h4>Requirements</h4>
@@ -308,14 +407,12 @@ function renderPanel(dayData) {
       </ul>
     </section>
     ` : ''}
-    
     ${dayData.extraChallenge ? `
     <section class="day-detail-section">
       <h4>Extra Challenge</h4>
       <p>${dayData.extraChallenge}</p>
     </section>
     ` : ''}
-    
     ${dayData.commit ? `
     <section class="day-detail-section">
       <h4>Commit</h4>
@@ -326,15 +423,9 @@ function renderPanel(dayData) {
     </section>
     ` : '<section class="day-detail-section"><h4>Commit</h4><p style="color: var(--fg-subtle);">No commit pushed yet</p></section>'}
   `;
-  
-  // Attach checkbox listeners
   slidePanelBody.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-    cb.addEventListener('change', () => {
-      // Could track per-requirement completion if needed
-    });
+    cb.addEventListener('change', () => {});
   });
-  
-  // Update mark complete button in panel footer
   const markBtn = document.getElementById('slidePanelMarkComplete');
   if (markBtn) {
     markBtn.textContent = isDone ? '✓ Marked Complete' : 'Mark Complete';
@@ -350,10 +441,8 @@ function renderPanel(dayData) {
 function updatePanelNav() {
   const days = curriculumData.days.map(d => d.day).sort((a, b) => a - b);
   const idx = days.indexOf(activePanelDay);
-  
   slidePanelPrev.disabled = idx <= 0;
   slidePanelNext.disabled = idx >= days.length - 1;
-  
   slidePanelPrev.onclick = () => idx > 0 && openPanel(days[idx - 1]);
   slidePanelNext.onclick = () => idx < days.length - 1 && openPanel(days[idx + 1]);
 }
@@ -361,66 +450,68 @@ function updatePanelNav() {
 function attachPanelListeners() {
   slidePanelClose?.addEventListener('click', closePanel);
   slidePanelOverlay?.addEventListener('click', closePanel);
-  
-  // Escape key
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && slidePanel.hasAttribute('open')) {
-      closePanel();
-    }
+    if (e.key === 'Escape' && slidePanel.hasAttribute('open')) closePanel();
   });
 }
 
-// Focus trap for modal
 function trapFocus(element) {
   const focusable = element.querySelectorAll('button, a, input, select, textarea, [tabindex]:not([tabindex="-1"])');
   const first = focusable[0];
   const last = focusable[focusable.length - 1];
-  
   element.addEventListener('keydown', function trap(e) {
     if (e.key !== 'Tab') return;
-    if (e.shiftKey && document.activeElement === first) {
-      e.preventDefault();
-      last.focus();
-    } else if (!e.shiftKey && document.activeElement === last) {
-      e.preventDefault();
-      first.focus();
-    }
+    if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
   });
 }
 
 // ============================================================================
 // Global Keyboard
 // ============================================================================
-
 function handleGlobalKeydown(e) {
-  // Number keys 1-9 jump to day (when not in input)
   if (e.target.tagName !== 'INPUT' && e.target.tagName !== 'TEXTAREA') {
     const num = parseInt(e.key, 10);
-    if (num >= 1 && num <= 9) {
-      openPanel(num);
-    }
+    if (num >= 1 && num <= 9) openPanel(num);
   }
 }
 
 // ============================================================================
 // Completion Toggle
 // ============================================================================
-
 function toggleComplete(day) {
-  if (completedDays.has(day)) {
-    completedDays.delete(day);
-  } else {
-    completedDays.add(day);
-  }
+  if (completedDays.has(day)) completedDays.delete(day);
+  else completedDays.add(day);
   saveProgress();
   updateCompletedDayStyles();
-  
-  // If panel is open for this day, re-render
   if (activePanelDay === day) {
     const dayData = curriculumData.days.find(d => d.day === day);
     if (dayData) renderPanel(dayData);
   }
 }
 
+// ============================================================================
+// Admin Link Visibility
+// ============================================================================
+function maybeShowAdminLink() {
+  if (ADMIN_EMAIL && currentUser && currentUser.email === ADMIN_EMAIL) {
+    const adminLink = document.querySelector('.admin-link');
+    if (adminLink) adminLink.style.display = 'inline';
+  }
+}
+
 // Export for debugging
-window.cppSprint = { curriculumData, completedDays, currentDay };
+window.cppSprint = { curriculumData, completedDays, currentDay, currentUser };
+
+// Initialize Google Sign-In when library loads
+if (typeof window.google !== 'undefined' && window.google.accounts) {
+  // library already loaded
+  initGoogleSignIn();
+} else {
+  // listen for load
+  const originalOnLoad = window.onload;
+  window.onload = () => {
+    if (originalOnLoad) originalOnLoad();
+    initGoogleSignIn();
+  };
+}
