@@ -9,6 +9,7 @@ module.exports = function(eleventyConfig) {
 
   // Global data: build date
   eleventyConfig.addGlobalData("buildDate", new Date().toISOString().split('T')[0]);
+  eleventyConfig.addGlobalData("baseUrl", "/30-Days-of-CPP/");
 
   // Filters
   eleventyConfig.addFilter("statusIcon", (status) => {
