@@ -1,11 +1,11 @@
 ---
-layout: layouts/base.njk
 title: 30-Day C++ Sprint
 eleventyExcludeFromCollections: true
 ---
 
-{% include "components/hero.njk" %}
+{% extends "layouts/base.njk" %}
 
+{% block content %}
 {% include "components/mission-brief.njk" %}
 
 {% include "components/goals.njk" %}
@@ -21,3 +21,4 @@ eleventyExcludeFromCollections: true
 {% include "components/review-process.njk" %}
 
 {% include "components/footer.njk" %}
+{% endblock %}
