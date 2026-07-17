@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin — 30-Day C++ Sprint — 30-Day C++ Sprint</title>
+  <meta name="description" content="A 30-day project-based C++ curriculum for VEX robotics preparation. Retrieval-test structure, honest commit log, no marketing fluff.">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preload" as="font" type="font/woff2" href="/assets/fonts/IBMPlexMono-Regular.woff2">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+  
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+  
+  <header class="hero" role="banner">
+  <div class="hero-left">
+    <span class="hero-title">30-Day C++ Sprint</span>
+    <a href="https://github.com/Bowen-Wan/30-Days-of-CPP" target="_blank" rel="noopener" class="btn btn--ghost btn--sm" aria-label="View on GitHub">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+    </a>
+  </div>
+  
+  <div class="hero-center">
+    <span class="hero-badge" id="currentDayBadge">Day 3 of 30</span>
+  </div>
+  
+  <div class="hero-right">
+    <div class="progress-bar progress-bar--mini" id="heroProgressBar" role="progressbar" aria-valuenow="3" aria-valuemin="1" aria-valuemax="30" aria-label="Overall progress"></div>
+  </div>
+</header>
+  
+  <main id="main" class="main">
+    
+  </main>
+  
+  <aside class="slide-panel" id="slidePanel" role="dialog" aria-modal="true" aria-labelledby="slidePanelTitle" hidden>
+  <header class="slide-panel-header">
+    <h2 class="slide-panel-title" id="slidePanelTitle">Day Detail</h2>
+    <button class="slide-panel-close" id="slidePanelClose" aria-label="Close panel">&times;</button>
+  </header>
+  <div class="slide-panel-body" id="slidePanelBody">
+    <div class="day-detail-placeholder">Click a day row to view details</div>
+  </div>
+  <footer class="slide-panel-footer">
+    <button class="btn btn--secondary" id="slidePanelPrev" disabled>← Previous</button>
+    <button class="btn btn--primary" id="slidePanelNext" disabled>Next →</button>
+    <button class="btn btn--primary" id="slidePanelMarkComplete">Mark Complete</button>
+  </footer>
+</aside>
+<div class="slide-panel-overlay" id="slidePanelOverlay" hidden></div>
+  
+  <script type="module">
+    import { init } from '/assets/js/app.js';
+    init();
+  </script>
+</body>
+</html>

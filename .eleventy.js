@@ -36,6 +36,8 @@ module.exports = function(eleventyConfig) {
     templateFormats: ["njk", "md", "html", "js"],
     htmlTemplateEngine: "njk",
     markdownTemplateEngine: "njk",
-    passthroughFileCopy: true
+    passthroughFileCopy: true,
+    // GitHub Pages project site prefix
+    pathPrefix: "/30-Days-of-CPP/"
   };
 };
